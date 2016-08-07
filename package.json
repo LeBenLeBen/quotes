@@ -1,6 +1,7 @@
 {
   "name": "quotes",
   "version": "0.0.1",
+  "homepage": "https://lebenleben.github.io/quotes",
   "private": true,
   "devDependencies": {
     "react-scripts": "0.2.1"
