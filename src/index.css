@@ -1,6 +1,10 @@
+/**
+ * Base layout
+ */
+
 body {
   margin: 0;
-  padding: 0;
+  padding: 15px;
 
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #004262;
@@ -9,18 +13,39 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+  @media (min-width: 600px) {
+    body {
+      padding: 40px;
+    }
+  }
+
+body > svg {
+  display: none;
+}
 
 .app {
   max-width: 40em;
-  margin: 50px auto;
+  margin: 0 auto;
 
   text-align: center;
 }
 
+
+/**
+ * Typography
+ */
+
 .brand {
   font-family: 'Bungee Shade';
-  font-size: 76px;
+  font-size: 50px;
+
+  margin: 0 0 50px;
 }
+  @media (min-width: 600px) {
+    .brand {
+      font-size: 75px;
+    }
+  }
 
 h2 {
   margin: 3em 0 2em;
@@ -38,6 +63,20 @@ hr {
   border: 0;
   border-top: 1px solid rgba(0,0,0,.1);
 }
+
+
+/**
+ * FILTERS
+ */
+
+.filters {
+  margin-bottom: 2em;
+}
+
+
+/**
+ * QUOTES
+ */
 
 .quote + .quote {
   margin-top: 30px;
@@ -137,6 +176,11 @@ hr {
     z-index: 2;
   }
 
+
+/**
+ * LOADER
+ */
+
 .loader {
   width: 4em;
   height: 4em;
@@ -164,8 +208,4 @@ hr {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
-}
-
-.filters {
-  margin-bottom: 2em;
 }
