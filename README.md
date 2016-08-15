@@ -38,3 +38,9 @@ npm start
 ```
 npm run build
 ```
+
+## Deploy to Github Pages
+
+```
+npm run deploy
+```
