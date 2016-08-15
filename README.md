@@ -14,7 +14,9 @@ Spreadsheet should respect the following column order:
 
 Use the first row for labels, data will load from 2nd row.
 
-# Config
+An example can be found [here](https://docs.google.com/spreadsheets/d/1WvsatMBiRx_yXooxwmoN1CW237OTFHPesqR3QXmSL44/edit#gid=0).
+
+## Config
 
 Copy the example config file:
 
@@ -23,15 +25,15 @@ cp src/config.example.js src/config.js
 ```
 
 Fill-in the fields with your own settings. You can create an app and generate a
-Client-ID on [https://console.developers.google.com/apis/](console.developers.google.com/apis).
+Client-ID on [console.developers.google.com/apis](https://console.developers.google.com/apis/).
 
-# Work
+## Work
 
 ```
 npm start
 ```
 
-# Build
+## Build
 
 ```
 npm run build

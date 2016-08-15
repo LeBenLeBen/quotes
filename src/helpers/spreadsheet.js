@@ -1,4 +1,6 @@
 import { orderBy } from 'lodash';
+import { hash } from './utils';
+import { get } from './localStorage';
 
 import config from '../config';
 
@@ -11,6 +13,8 @@ export function checkAuth(callback) {
 }
 
 export function load(cb) {
+  let userLikes = get('likes') || [];
+
   window.gapi.client.load('sheets', 'v4', () => {
     window.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: config.spreadsheetId,
@@ -26,7 +30,13 @@ export function load(cb) {
             text = quote[1].split('\n'),
             author = quote[2] && quote[2].trim(),
             interlocutor = quote[3] || '',
-            likes = parseInt(quote[4],10) || 0;
+            likes = parseInt(quote[4],10) || 0,
+            id = hash(text),
+            liked = false;
+
+        if (userLikes.indexOf(id) > -1) {
+          liked = true;
+        }
 
         if (!isNaN(dateParsed)) {
           date = dateParsed;
@@ -42,7 +52,8 @@ export function load(cb) {
           text,
           author,
           interlocutor,
-          likes
+          likes,
+          liked
         }
       });
 

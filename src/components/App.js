@@ -3,6 +3,8 @@ import { orderBy } from 'lodash';
 
 import config from '../config';
 import { checkAuth, load, updateCell } from '../helpers/spreadsheet';
+import { hash } from '../helpers/utils';
+import * as ls from '../helpers/localStorage';
 
 import Filters from './Filters';
 import Quote from './Quote';
@@ -167,16 +169,31 @@ class App extends Component {
   toggleLike(q, save = true) {
     const quotes = [...this.state.quotes],
           index = quotes.indexOf(q),
-          quote = quotes[index];
+          quote = quotes[index],
+          userLikes = ls.get('likes') || [];
 
     if (quote) {
       if (quote.liked) {
         quote.likes--;
         quote.liked = false;
+
+        let id = hash(quote.text),
+            index = userLikes.indexOf(id);
+
+        if (index) {
+          userLikes.splice(index, 1);
+          ls.set('likes', userLikes);
+        }
       }
       else {
         quote.likes++;
         quote.liked = true;
+
+        let id = hash(quote.text);
+        if (id) {
+          userLikes.push(id);
+          ls.set('likes',  userLikes);
+        }
       }
 
       this.setState({
