@@ -1,14 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import config from './config';
-import App from './App';
+import App from './components/App';
 
-import './index.css';
+import './styles/index.css';
 
 window.gapi.load('client', () => {
-  window.gapi.client.setApiKey(config.googleApiKey);
-
   ReactDOM.render(
     <App />,
     document.getElementById('root')

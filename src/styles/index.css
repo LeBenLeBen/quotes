@@ -64,14 +64,72 @@ hr {
   border-top: 1px solid rgba(0,0,0,.1);
 }
 
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+
+  color: white;
+  font-size: inherit;
+
+  background-color: #004262;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+  .btn:hover,
+  .btn:focus {
+    outline: none;
+
+    background-color: #0076af;
+  }
+
+  .btn:active {
+    position: relative;
+    top: 1px;
+  }
+
+.alert {
+  color: #D65F5F;
+}
+  .alert__icon {
+    display: block;
+    margin: 0 auto 20px;
+
+    font-size: 100px;
+    line-height: 1;
+  }
+
+
+/**
+ * FORMS
+ */
+
+select {
+  display: inline-block;
+  height: 28px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  background-color: white;
+  border: 1px solid #cecece;
+}
+
 
 /**
  * FILTERS
  */
 
 .filters {
+  padding-left: 0;
   margin-bottom: 2em;
+  list-style: none;
 }
+  .filters > li {
+    display: inline-block;
+  }
+  .filters > li:not(:last-child) {
+    margin-right: 20px;
+  }
 
 
 /**
@@ -175,6 +233,39 @@ hr {
     position: relative;
     z-index: 2;
   }
+
+
+.quote__like {
+  margin-left: 15px;
+
+  color: currentColor;
+  text-decoration: none;
+}
+
+  .quote__like.liked {
+    color: #D3504A;
+  }
+
+  .quote__like.liked .heart-icon,
+  .quote__like:hover .heart-icon,
+  .quote__like:focus .heart-icon {
+    fill: currentColor;
+  }
+
+.heart-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+
+  position: relative;
+  top: -1px;
+
+  vertical-align: middle;
+
+  fill: none;
+  stroke: currentColor;
+}
 
 
 /**
