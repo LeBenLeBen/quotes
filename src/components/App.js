@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { orderBy } from 'lodash';
 
-import config from '../config';
 import { checkAuth, load, updateCell } from '../helpers/spreadsheet';
 import { hash } from '../helpers/utils';
 import * as ls from '../helpers/localStorage';
 
 import Filters from './Filters';
 import Quote from './Quote';
+import Alert from './Alert';
 
 class App extends Component {
 
@@ -24,9 +24,14 @@ class App extends Component {
   }
 
   componentDidMount() {
-    checkAuth(this.handleAuth.bind(this));
+    window.gapi.load('client', () => {
+      checkAuth(true, this.handleAuth.bind(this));
+    });
   }
 
+  /**
+   * Check user authenification status and set app state accordingly
+   */
   handleAuth(authResult) {
     if (authResult && !authResult.error) {
       this.setState({
@@ -40,6 +45,9 @@ class App extends Component {
     }
   }
 
+  /**
+   * Once quotes have been loaded from the spreadsheet
+   */
   onLoad(data, error) {
     if (data) {
       const random = data.quotes[Math.floor(Math.random() * data.quotes.length)];
@@ -76,14 +84,14 @@ class App extends Component {
     else if (quotes.length) {
       return (
         <div className="page">
-          <h2>Au bol</h2>
+          <h2>Randomly picked</h2>
           <Quote
             quote={ this.state.random }
             toggleLike={ this.toggleLike.bind(this) } />
 
           <hr />
 
-          <h2>Tout le bazar</h2>
+          <h2>{ this.state.quotes.length} quotes</h2>
           <Filters
             authors={ this.state.authors }
             author={ this.state.author }
@@ -108,7 +116,9 @@ class App extends Component {
       );
     }
     else if (this.state.error) {
-      return this.buildErrorMessage(this.state.error);
+      return (
+        <Alert error={ this.state.error } />
+      );
     }
     else {
       return (
@@ -117,46 +127,26 @@ class App extends Component {
     }
   }
 
-  buildErrorMessage(error) {
-    let message, icon;
-
-    switch(error.code) {
-      case 403:
-        icon = '⛔️';
-        message = 'You don’t have permission to access this Google Spreadsheet.'
-        break;
-      case 404:
-        icon = '❓';
-        message = 'Google Spreadsheet not found.'
-        break;
-      default:
-        icon = '💀';
-        message = 'Doh, I couldn’t load the data.'
-    }
-
-    return (
-      <p className="alert">
-        <span className="alert__icon">{ icon }</span>
-        { message }
-      </p>
-    );
-  }
-
+  /**
+   * Request Google authentification
+   */
   authenticate(e) {
     e.preventDefault();
-    window.gapi.auth.authorize({
-      client_id: config.clientId,
-      scope: config.scope,
-      immediate: false
-    }, this.handleAuth.bind(this));
+    checkAuth(false, this.handleAuth.bind(this));
   }
 
+  /**
+   * Filter by author
+   */
   setAuthor(author) {
     this.setState({
       author
     });
   }
 
+  /**
+   * Change the order of the quotes
+   */
   setOrder(order) {
     const quotes = orderBy(this.state.quotes, [order], ['desc']);
 
@@ -166,6 +156,11 @@ class App extends Component {
     });
   }
 
+  /**
+   * Add or remove like on the quote
+   * The value is incremented/decremented into the spreadsheet
+   * User owns likes are saved to its browser LocalStorage
+   */
   toggleLike(q, save = true) {
     const quotes = [...this.state.quotes],
           index = quotes.indexOf(q),
@@ -173,34 +168,37 @@ class App extends Component {
           userLikes = ls.get('likes') || [];
 
     if (quote) {
+      const id = hash(quote.text);
+
       if (quote.liked) {
         quote.likes--;
         quote.liked = false;
 
-        let id = hash(quote.text),
-            index = userLikes.indexOf(id);
+        const index = userLikes.indexOf(id);
 
-        if (index) {
+        if (index > -1) {
           userLikes.splice(index, 1);
-          ls.set('likes', userLikes);
         }
       }
       else {
         quote.likes++;
         quote.liked = true;
 
-        let id = hash(quote.text);
         if (id) {
           userLikes.push(id);
-          ls.set('likes',  userLikes);
         }
       }
 
+      ls.set('likes', userLikes);
+
+      // Update state immediately for instant visual feedback
       this.setState({
         quotes
       }, () => {
         if (save) {
+          // Now save the data to the spreadsheet
           updateCell('E', quote.row, quote.likes, null, (error) => {
+            // In case an error occured while saving, toggle the state back
             this.toggleLike(quote, false);
           });
         }

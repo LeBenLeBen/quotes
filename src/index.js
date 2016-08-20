@@ -5,9 +5,7 @@ import App from './components/App';
 
 import './styles/index.css';
 
-window.gapi.load('client', () => {
-  ReactDOM.render(
-    <App />,
-    document.getElementById('root')
-  );
-});
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
