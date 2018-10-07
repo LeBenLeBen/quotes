@@ -1,3 +1,5 @@
+⚠️ This project has been discontinued in favor of [Citations](https://github.com/LeBenLeBen/citations).
+
 # Quotes
 
 A simple React App which displays quotes from a Google Spreadsheet.
